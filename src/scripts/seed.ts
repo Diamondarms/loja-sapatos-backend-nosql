@@ -16,11 +16,11 @@ async function seed() {
   ]);
 
   const categories = await Category.insertMany([
-    { name: 'Roupas Masculinas' },
-    { name: 'Roupas Femininas' },
-    { name: 'Acessórios' },
-    { name: 'Tecnologia' },
-    { name: 'Esporte e Lazer' }
+    { name: 'Tênis' },
+    { name: 'Sapatos' },
+    { name: 'Sandálias' },
+    { name: 'Botas' },
+    { name: 'Chinelos' }
   ]);
 
   const suppliers = await Supplier.insertMany([
