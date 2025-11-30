@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "es2015",
+    "target": "es6",
+    "types": [],
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleResolution":"node",
+    "ignoreDeprecations":"6.0",
+    "moduleDetection": "force",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+
+  }
+}
