@@ -175,6 +175,22 @@ export const ProductsBoughtByCustomer = async (customer_id: string): Promise<any
                 customer_id: new mongoose.Types.ObjectId(customer_id) 
             } 
         },
+        { $unwind: "$items" },
+        {
+            $group: {
+                _id: "$items.product_id",
+                customer_id: { $first: "$customer_id" }
+            }
+        },
+        {
+            $lookup: {
+                from: "products",
+                localField: "_id",
+                foreignField: "_id",
+                as: "product_info"
+            }
+        },
+        { $unwind: "$product_info" },
         { 
             $lookup: {
                 from: "customers",
@@ -184,16 +200,6 @@ export const ProductsBoughtByCustomer = async (customer_id: string): Promise<any
             }
         },
         { $unwind: "$customer_info" },
-        { $unwind: "$items" },
-        {
-            $lookup: {
-                from: "products",
-                localField: "items.product_id",
-                foreignField: "_id",
-                as: "product_info"
-            }
-        },
-        { $unwind: "$product_info" },
         {
             $project: {
                 _id: 0,
@@ -216,9 +222,15 @@ export const CustomersWhoBoughtProduct = async (product_id: string): Promise<any
             } 
         },
         {
+            $group: {
+                _id: "$customer_id",
+                product_id: { $first: "$items.product_id" }
+            }
+        },
+        {
             $lookup: {
                 from: "customers",
-                localField: "customer_id",
+                localField: "_id",
                 foreignField: "_id",
                 as: "customer_info"
             }
@@ -227,7 +239,7 @@ export const CustomersWhoBoughtProduct = async (product_id: string): Promise<any
         {
             $lookup: {
                 from: "products",
-                localField: "items.product_id",
+                localField: "product_id",
                 foreignField: "_id",
                 as: "product_info"
             }
@@ -236,7 +248,7 @@ export const CustomersWhoBoughtProduct = async (product_id: string): Promise<any
         {
             $project: {
                 _id: 0,
-                customer_id: "$customer_id",
+                customer_id: "$_id",
                 customer_name: "$customer_info.name",
                 product_name: "$product_info.name"
             }
