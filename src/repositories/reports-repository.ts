@@ -122,11 +122,16 @@ export const findMostUsedMethod = async (): Promise<any> => {
                 as: "method_info"
             }
         },
-        { $unwind: "$method_info" },
+        { 
+            $unwind: {
+                path: "$method_info",
+                preserveNullAndEmptyArrays: true
+            }
+        },
         {
             $project: {
                 method_id: "$_id",
-                method_name: "$method_info.name",
+                method_name: { $ifNull: ["$method_info.name", "Método não encontrado"] },
                 method_count: 1,
                 _id: 0
             }
